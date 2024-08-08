@@ -1,0 +1,78 @@
+## CODE
+
+**Table creation:**
+
+CREATE TABLE Departments (
+    DepartmentID INT PRIMARY KEY,
+    DepartmentName VARCHAR(100) NOT NULL,
+    Location VARCHAR(100)
+);
+
+CREATE TABLE JobPositions (
+    JobPositionID INT PRIMARY KEY,
+    JobTitle VARCHAR(100) NOT NULL,
+    MinSalary DECIMAL(10, 2),
+    MaxSalary DECIMAL(10, 2)
+);
+
+CREATE TABLE Employees (
+    EmployeeID INT PRIMARY KEY,
+    FirstName VARCHAR(50) NOT NULL,
+    LastName VARCHAR(50) NOT NULL,
+    Email VARCHAR(100) UNIQUE NOT NULL,
+    PhoneNumber VARCHAR(20),
+    HireDate DATE NOT NULL,
+    JobPositionID INT,
+    DepartmentID INT,
+    Salary DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (JobPositionID) REFERENCES JobPositions(JobPositionID),
+    FOREIGN KEY (DepartmentID) REFERENCES Departments(DepartmentID)
+);
+
+**Inserting data:**
+
+INSERT INTO Departments (DepartmentID, DepartmentName, Location) VALUES
+(1, 'Human Resources', 'New York'),
+(2, 'Engineering', 'San Francisco'),
+(3, 'Marketing', 'Los Angeles');
+
+INSERT INTO JobPositions (JobPositionID, JobTitle, MinSalary, MaxSalary) VALUES
+(1, 'Software Engineer', 60000, 120000),
+(2, 'Marketing Specialist', 40000, 80000),
+(3, 'HR Manager', 50000, 100000);
+
+INSERT INTO Employees (EmployeeID, FirstName, LastName, Email, PhoneNumber, HireDate, JobPositionID, DepartmentID, Salary) VALUES
+(1, 'John', 'Doe', 'john.doe@example.com', '555-1234', '2020-01-15', 1, 2, 90000),
+(2, 'Jane', 'Smith', 'jane.smith@example.com', '555-5678', '2019-03-22', 2, 3, 70000),
+(3, 'Alice', 'Johnson', 'alice.johnson@example.com', '555-8765', '2021-07-11', 3, 1, 80000);
+
+**Retrieve data:**
+
+SELECT e.EmployeeID, e.FirstName, e.LastName, d.DepartmentName
+FROM Employees e
+JOIN Departments d ON e.DepartmentID = d.DepartmentID
+WHERE d.DepartmentName = 'Engineering';
+
+SELECT e.EmployeeID, e.FirstName, e.LastName, j.JobTitle
+FROM Employees e
+JOIN JobPositions j ON e.JobPositionID = j.JobPositionID
+WHERE j.JobTitle = 'Software Engineer';
+
+SELECT e.EmployeeID, e.FirstName, e.LastName, e.Salary
+FROM Employees e
+WHERE e.Salary > 80000;
+
+SELECT e.EmployeeID, e.FirstName, e.LastName, d.DepartmentName, j.JobTitle, e.Salary
+FROM Employees e
+JOIN Departments d ON e.DepartmentID = d.DepartmentID
+JOIN JobPositions j ON e.JobPositionID = j.JobPositionID;
+
+**Data Deletion:**
+DELETE FROM Employees
+WHERE EmployeeID = 1;
+
+**Adding new job position:**
+INSERT INTO JobPositions (JobPositionID, JobTitle, MinSalary, MaxSalary)
+VALUES (4, 'Data Analyst', 50000, 95000);
+
+
